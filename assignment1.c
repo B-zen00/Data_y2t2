@@ -42,6 +42,7 @@ int main(){
     printf("Max Value = %d ,in index %d\n", arr[jIndex], jIndex);
     printf("Max Difference = %d\n", abs(arr[jIndex] - arr[iIndex]));
     printf("Total Loop = %d\n", loopCount1);
+    printf("Hello World");
 
     return 0;
 }
