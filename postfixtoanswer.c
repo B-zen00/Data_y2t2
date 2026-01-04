@@ -4,7 +4,7 @@
 #include <string.h>
 #include <math.h>
 
-/* Stack Node */
+// Stack Node
 struct Node {
     char Variable[100];
     int Number;
@@ -13,23 +13,34 @@ struct Node {
 };
 struct Node* top = NULL;
 
-/* Function prototypes */
+// Function prototypes
 void pushNumber(int val);
 void pushVariable(char Variable[]);
 struct Node pop();
 void postfixtoanswer(char postfix[]);
 
-/* Main function */
+// Main function 
 int main() {
+    int again = 1;
     char postfix[100];
-    printf("Enter postfix expression: ");
-    scanf("%s", postfix);
+    while (again == 1){
+        printf("Enter postfix expression: ");
+        scanf("%s", postfix);
 
-    postfixtoanswer(postfix);
+        postfixtoanswer(postfix);
+        printf("Would you like to do it again? (1 = yes, 0 = no): ");
+        scanf("%d", &again);
+        while(again != 1 && again != 0){
+            // again
+            printf("Invalid input. Please try again.\n");
+            printf("Would you like to do it again? (1 = yes, 0 = no): ");
+            scanf("%d", &again);    
+        }
+    }
     return 0;
 }
 
-/* Push number function*/
+// Push number function
 void pushNumber(int val) {
     struct Node* n = (struct Node*)malloc(sizeof(struct Node));
     n->Number = 1;
@@ -39,7 +50,7 @@ void pushNumber(int val) {
     top = n;
 }
 
-/* Push variable function */
+// Push variable function
 void pushVariable(char Variable[]) {
     struct Node* n = (struct Node*)malloc(sizeof(struct Node));
     n->Number = 0;
@@ -55,7 +66,7 @@ void pushExpr(char expr[]) {
     top = n;
 }
 
-/* Pop function */
+// Pop function
 struct Node pop() {
     struct Node temp;
     if (top == NULL) return temp;
@@ -66,7 +77,7 @@ struct Node pop() {
     return temp;
 }
 
-/* Make Postfix to Answer */
+// Make Postfix to Answer 
 void postfixtoanswer(char postfix[]) {
     int step = 1;
 
@@ -77,21 +88,21 @@ void postfixtoanswer(char postfix[]) {
     for (int i = 0; postfix[i] != '\0'; i++) {
 
         if(isalnum(postfix[i])){
-            /* Number */
+            // Number 
             if (isdigit(postfix[i])) {
                 pushNumber(postfix[i]-'0');
             }
-            /* Variable */
+            // Variable
             else{
                 char temp[2] = { postfix[i], '\0' };
                 pushVariable(temp);
             }
         }else {
-            /* Operator */
+            // Operator
             struct Node x1 = pop();
             struct Node x2 = pop();
 
-            /* Operator Number */
+            // Operator Number
             if (x1.Number && x2.Number) {
                 int result;
                 switch (postfix[i]) {
@@ -103,7 +114,7 @@ void postfixtoanswer(char postfix[]) {
                 }
                 pushNumber(result);
             }
-            /* Operator Variable */
+            // Operator Variable
             else {
                 char newVariable[100];
                 sprintf(newVariable, "(%s%c%s)", x2.Variable, postfix[i], x1.Variable);
@@ -111,7 +122,7 @@ void postfixtoanswer(char postfix[]) {
             }
         }
 
-        /* Print stack */
+        // Print stack
         printf("%4d%8c       ", step++, postfix[i]);
 
         struct Node* t = top;
